@@ -9,6 +9,17 @@ export default class App extends React.Component {
     this.state = { checklists: [] };
   }
 
+  renderCheckLists = (array, index) => {
+    let checkList = array.map((obj, index) => {
+      return (
+        <div className="top aligned item" key={index}>
+          <Checklist name={obj.name} items={obj.items} />
+        </div>
+      );
+    });
+    return <div className="ui big horizontal divided list">{checkList}</div>;
+  };
+
   addChecklist = () => {
     this.checkListForm.current.turnDisplayOn();
   };
@@ -17,12 +28,22 @@ export default class App extends React.Component {
     let newChecklists = this.state.checklists.concat({ name, items });
     this.setState({ checklists: newChecklists });
   };
+
+  handleCheck = () => {};
   render() {
     return (
-      <div>
-        <button onClick={this.addChecklist}>Add new Checklist</button>
-        <ChecklistForm ref={this.checkListForm} onSubmit={this.formSubmit} />
-        <Checklist />
+      <div className="ui container">
+        <div>
+          <button onClick={this.addChecklist}>Add new Checklist</button>
+        </div>
+        <div>
+          <ChecklistForm
+            ref={this.checkListForm}
+            onSubmit={this.formSubmit}
+            onCheck={this.handleCheck}
+          />
+        </div>
+        {this.renderCheckLists(this.state.checklists)}
       </div>
     );
   }
