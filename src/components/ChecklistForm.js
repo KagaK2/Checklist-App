@@ -44,31 +44,49 @@ export default class ChecklistForm extends React.Component {
     });
     this.setState({ items: newItems, item: "" });
   };
+  exitForm = () => {
+    this.props.onClose();
+    this.setState({ display: false, name: "", item: "", items: [] });
+  };
   render() {
     if (this.state.display) {
       return ReactDOM.createPortal(
-        <form className="ui container form" onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label>CheckList Name</label>
-            <input
-              type="text"
-              value={this.state.name}
-              onChange={this.handleNameChange}
-              required
-            />
+        <form
+          className="ui container form checklist"
+          onSubmit={this.handleSubmit}
+        >
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={this.exitForm}
+          >
+            X
+          </button>
+          <div className="checklistform">
+            <div className="field">
+              <label>CheckList Name</label>
+              <input
+                type="text"
+                value={this.state.name}
+                onChange={this.handleNameChange}
+                required
+              />
+            </div>
+
+            <div className="field">{this.renderAllItems(this.state.items)}</div>
+            <div className="field">
+              <input
+                type="text"
+                value={this.state.item}
+                onChange={this.handleItemChange}
+              />
+              <button type="button" onClick={this.addNewItem}>
+                Add new item
+              </button>
+            </div>
+            <input type="submit" value="Submit" />
           </div>
-          <div className="field">{this.renderAllItems(this.state.items)}</div>
-          <div className="field">
-            <input
-              type="text"
-              value={this.state.item}
-              onChange={this.handleItemChange}
-            />
-            <button type="button" onClick={this.addNewItem}>
-              Add new item
-            </button>
-          </div>
-          <input type="submit" value="Submit" />
         </form>,
         document.querySelector("#dialog")
       );
